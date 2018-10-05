@@ -58,13 +58,14 @@ char* request_server_masterrequest(void)
   //  ESP_LOGI("SM request", "cntMsg =>  %d", cntMsg );
     if (cntMsg > 0)
     {
-      cJSON_AddItemToObject(msgJson, "transaction", transaction);
+      cJSON_AddItemToObject(msgJson, "tr", transaction);
       cJSON_AddNumberToObject(transaction,"id",	cntTransaction++);
-      char buf[50];
-      sprintf(buf,"%ud", get_timestamp());
-      cJSON_AddStringToObject(transaction,"starttime",		buf);
-      cJSON_AddNumberToObject(transaction,"waitresponce", 1000	);
-      cJSON_AddNumberToObject(transaction,"dataamount", cntMsg	);
+     // char buf[50];
+     // sprintf(buf,"%ud", get_timestamp());
+      //cJSON_AddStringToObject(transaction,"starttime",		buf);
+      cJSON_AddNumberToObject(transaction,"st",  get_timestamp()	);
+      cJSON_AddNumberToObject(transaction,"wa", 1000	);
+      cJSON_AddNumberToObject(transaction,"da", cntMsg	);
   
   
       CJSON_PUBLIC(cJSON *) commands =  cJSON_CreateArray();
@@ -82,11 +83,11 @@ char* request_server_masterrequest(void)
           CJSON_PUBLIC(cJSON *) command =  cJSON_CreateObject();
           cJSON_AddNumberToObject(command, "id",msg.id);
           cJSON_AddStringToObject( command,"type","canpackage");
-          sprintf(buf,"%ud", msg.timestamp);
-          cJSON_AddStringToObject( command,"timestamp",buf);
-   
-          cJSON_AddNumberToObject(command, "address",msg.msg.identifier);
-          cJSON_AddNumberToObject(command, "datalength",msg.msg.data_length_code);
+          //sprintf(buf,"%ud", msg.timestamp);
+          //cJSON_AddStringToObject( command,"ts",buf);
+          cJSON_AddNumberToObject(command, "ts",msg.timestamp);
+          cJSON_AddNumberToObject(command, "ad",msg.msg.identifier);
+          cJSON_AddNumberToObject(command, "dl",msg.msg.data_length_code);
          
           CJSON_PUBLIC(cJSON *) data =  cJSON_CreateArray();
           
@@ -95,12 +96,12 @@ char* request_server_masterrequest(void)
             cJSON_AddNumberToObject(data, "data",msg.msg.data[j]);
           }
 
-          cJSON_AddItemToObject(command, "can_data", data);
+          cJSON_AddItemToObject(command, "cd", data);
           
-          cJSON_AddBoolToObject(command, "waitforanswer", false);
-           cJSON_AddNumberToObject(command, "timeout", 0);
+          cJSON_AddBoolToObject(command, "wa", false);
+           cJSON_AddNumberToObject(command, "to", 0);
           
-          cJSON_AddItemToObject(commands, "command", command);
+          cJSON_AddItemToObject(commands, "cm", command);
              
              
           cntMsg = uxQueueMessagesWaiting( rxCanQueue );
@@ -113,7 +114,7 @@ char* request_server_masterrequest(void)
         }
         
       }
-      cJSON_AddItemToObject(msgJson, "commands", commands);
+      cJSON_AddItemToObject(msgJson, "cms", commands);
         
     
     }
