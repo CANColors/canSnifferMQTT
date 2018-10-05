@@ -151,12 +151,12 @@ void controlNetRequestSendState(ControlEvents ev)
   {
    case EV_START:{break;}
    case EV_STOP: { break; }
-   case EV_CAN_REQUEST: { break;}
+   case EV_CAN_REQUEST: { xSemaphoreGive(mqtt_tx);  break;}
    case EV_NET_START:{break;}
    case EV_NET_END:
    {
-      xSemaphoreGive(mqtt_rx);   //Looking for the response
-      cs = CONTROL_START;
+      xSemaphoreGive(mqtt_tx);   //Looking for the response
+      cs = CONTROL_CAN_REQUEST_WAIT;
       prevCs =  CONTROL_SEND_REQUEST;
       ControlEvents cs2 = EV_START;    
        xQueueSend(controlEvents, &cs2, portMAX_DELAY);

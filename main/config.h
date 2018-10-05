@@ -13,7 +13,7 @@
   #define MQTT_HEARTBEAT_TOPIC    "heartbeat"
   
  
-#define MQTT_SNIFFER_TOPIC        "sniffer/sniffer"
+#define MQTT_SNIFFER_TOPIC        "sniffer/sniffer3"
 
 
 #define CAN_RX_BUFFER   110

@@ -86,7 +86,7 @@ void app_main()
        */
        
    //  xTaskCreatePinnedToCore(mqtt_receive_task,  "MQTT_rx", 4096, NULL, MQTT_RX_TASK_PRIO, NULL, 0);
-     xTaskCreatePinnedToCore(mqtt_transmit_task, "MQTT_tx", 4096, NULL, MQTT_TX_TASK_PRIO, NULL, 0);
+     xTaskCreatePinnedToCore(mqtt_transmit_task, "MQTT_tx", 8096, NULL, MQTT_TX_TASK_PRIO, NULL, 0);
    
      xTaskCreatePinnedToCore(can_transmit_task, "CAN_tx", 4096, NULL, CAN_TX_TASK_PRIO, NULL, 1);
      xTaskCreatePinnedToCore(can_receive_task,  "CAN_rx", 4096, NULL, CAN_RX_TASK_PRIO, NULL, 1);

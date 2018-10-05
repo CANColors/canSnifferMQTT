@@ -73,7 +73,7 @@ char* request_server_masterrequest(void)
       can_msg_timestamped msg;
       int cnt=0;
       
-      while (cntMsg > 0 && cnt<3)
+      while (cntMsg > 0 && cnt<60)
       {
         cnt++;
         BaseType_t res =  xQueueReceive(rxCanQueue, &msg, 0);

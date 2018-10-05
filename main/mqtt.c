@@ -140,14 +140,17 @@ void mqtt_transmit_task(void *arg)
       ESP_LOGI(TAG, "Messages to send:%d",  cntMsg );
        ControlEvents cs2 = EV_NET_START;    
        xQueueSend(controlEvents, &cs2, portMAX_DELAY);
-       
-        char* data = request_server_masterrequest();
+           char* data;
+  trans_start:   data    = request_server_masterrequest();
          ESP_LOGI(TAG, "Message length:%d",  strlen(data));
-        int msg_id = esp_mqtt_client_publish(client, MQTT_SNIFFER_TOPIC, data, strlen(data), 2, 0);
+        int msg_id = esp_mqtt_client_publish(client, MQTT_SNIFFER_TOPIC, data, strlen(data), 0, 0);
         ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
        
         free (data);
-        
+            cntMsg = uxQueueMessagesWaiting( rxCanQueue );
+            if (cntMsg != 0) goto trans_start;
+            
+            
        cs2 = EV_NET_END;    
        xQueueSend(controlEvents, &cs2, portMAX_DELAY);  
       }else 
