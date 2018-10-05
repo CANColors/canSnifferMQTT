@@ -1,11 +1,3 @@
-/* Simple HTTP Server Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
 
 #include <esp_wifi.h>
 #include <esp_event_loop.h>
@@ -42,18 +34,7 @@
 
 #define CONTROL_QUEUE_MAX   10
 
-
-/* A simple example that demonstrates how to create GET and POST
- * handlers for the web server.
- * The examples use simple WiFi configuration that you can set via
- * 'make menuconfig'.
- * If you'd rather not, just change the below entries to strings
- * with the config you want -
- * ie. #define EXAMPLE_WIFI_SSID "mywifissid"
-*/
-
-
-static const char *TAG="APP";
+static const char *TAG="SNIFFER";
 
 QueueHandle_t rxCanQueue;
 QueueHandle_t txCanQueue;
@@ -94,7 +75,7 @@ void app_main()
     set_time();
     canInit();
     
-    testCanDataGenerate();
+  //  testCanDataGenerate();
     
      /*
      xTaskCreatePinnedToCore(http_receive_task,  "HTTP_rx", 4096, NULL, HTTP_RX_TASK_PRIO, NULL, tskNO_AFFINITY);

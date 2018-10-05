@@ -13,7 +13,7 @@
   #define MQTT_HEARTBEAT_TOPIC    "heartbeat"
   
  
-#define MQTT_SNIFFER_TOPIC        "sniffer"
+#define MQTT_SNIFFER_TOPIC        "sniffer/sniffer"
 
 
 #define CAN_RX_BUFFER   110
@@ -23,7 +23,8 @@
 #define NET_TRANSMIT_TIMESLOT     100
 
 /* Constants that aren't configurable in menuconfig */
-#define MQTT_URL "mqtt://192.168.137.102"
+//#define MQTT_URL "mqtt://192.168.137.102"
+#define MQTT_URL "mqtt://185.69.155.192"
 //#define MQTT_URL "mqtt://iot.eclipse.org",
 #define MQTT_PORT 1883
 
