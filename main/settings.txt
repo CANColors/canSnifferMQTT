@@ -1,0 +1,18 @@
+{
+   "transaction":{
+      "id":0,
+      "starttime":"2683303892d",
+      "waitresponce":1000,
+      "dataamount":10
+   },
+   "cansettings":{
+      "time":{
+         "freq":1000
+      },
+      "filter":{
+         "acc_code":0,
+         "acc_mask":0,
+         "single_filter":1
+      }
+   }
+}

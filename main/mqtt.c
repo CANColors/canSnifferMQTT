@@ -18,12 +18,15 @@
 #include "lwip/netdb.h"
 
 #include "esp_log.h"
+#include "cjson.h"
 #include "mqtt_client.h"
+
 
 #include "config.h"
 #include "control.h"
 #include "requests.h"
 #include "can.h"
+#include "settings.h"
 
 
 
@@ -34,6 +37,8 @@ extern QueueHandle_t rxCanQueue;
 extern QueueHandle_t txCanQueue;
 extern QueueHandle_t controlEvents;
 
+void mqtt_receive(esp_mqtt_event_handle_t event);
+
 static const char* TAG = "MQTT";
 
 static esp_mqtt_client_handle_t client;
@@ -42,14 +47,14 @@ static esp_mqtt_client_handle_t client;
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 {
     client = event->client;
-    //int msg_id;
+    int msg_id;
     // your_context_t *context = event->context;
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-         /*   msg_id = esp_mqtt_client_subscribe(client, "top", 0);
+            msg_id = esp_mqtt_client_subscribe(client, "settings", 0);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
-
+/*
             msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 1);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
@@ -76,6 +81,7 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
             //TODO Тут мы принимает данные и их нужно обработать 
+            mqtt_receive(event);
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -83,6 +89,45 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
     }
     return ESP_OK;
 }
+
+/*****************************************************************************/
+/*      ?? ??????? ??????? ?????? ?? ?????                                   */
+/*   ?????? ?? ? ?????????? ??????                                           */
+/*****************************************************************************/
+void mqtt_receive(esp_mqtt_event_handle_t event)
+{
+    char* data;
+  //  if (!strcmp(event->topic, "settings") )
+     {
+        data =   event->data;
+        if (data != NULL)
+        {
+          CJSON_PUBLIC(cJSON *) jdata =  cJSON_Parse(data);
+          if (!jdata )
+          {
+             ESP_LOGE(TAG, "JSON parse failed: %s", cJSON_GetErrorPtr());
+          } else
+          {
+           // cJSON * trans = cJSON_GetObjectItem(jdata,"transaction");
+           // int readed =  cJSON_GetObjectItem(trans,"readed")->valueint;
+           // if (readed == 1)
+            {
+             parseCommand (jdata);
+              cJSON_Delete (jdata);
+
+//             ControlEvents cs2 = EV_NET_RECEIVED;
+//              xQueueSend(controlEvents, &cs2, portMAX_DELAY);
+            }
+            // cJSON_Delete (jdata);
+
+          }
+
+
+        }
+     }
+
+}
+
 
 /*
 static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)

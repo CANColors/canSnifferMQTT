@@ -73,7 +73,9 @@ void app_main()
     
     MqttInitM();
     set_time();
+
     canInit();
+    canReInit();
     
   //  testCanDataGenerate();
     
