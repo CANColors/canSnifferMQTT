@@ -116,8 +116,12 @@ void can_transmit_task(void *arg)
 
 
 
-static const can_filter_config_t f_config = CAN_FILTER_CONFIG_ACCEPT_ALL();
-static const can_timing_config_t t_config_500 = CAN_TIMING_CONFIG_500KBITS();
+//static const can_filter_config_t f_config = CAN_FILTER_CONFIG_ACCEPT_ALL();
+static const can_filter_config_t f_config = {.acceptance_code = 0x755<<21,
+                                             .acceptance_mask =  ~(0x700 << 21),
+                                             .single_filter = true};
+
+static const can_timing_config_t t_config = CAN_TIMING_CONFIG_500KBITS();
 static const can_timing_config_t t_config_100 = CAN_TIMING_CONFIG_100KBITS();
 //Set TX queue length to 0 due to listen only mode
 static const can_general_config_t g_config = {.mode = CAN_MODE_NORMAL,
@@ -138,10 +142,10 @@ void canInit(void)
     gpio_set_level(CAN_EN_GPIO, 0);
     
   
-   //static const can_filter_config_t f_config = CAN_FILTER_CONFIG_ACCEPT_ALL();
-    //static const can_timing_config_t t_config = CAN_TIMING_CONFIG_500KBITS();
+  // static const can_filter_config_t f_config = CAN_FILTER_CONFIG_ACCEPT_ALL();
+  // static const can_timing_config_t t_config = CAN_TIMING_CONFIG_500KBITS();
     //Set TX queue length to 0 due to listen only mode
-    canCfg.general_cfg.mode = CAN_MODE_NORMAL;
+ /*   canCfg.general_cfg.mode = CAN_MODE_NORMAL;
     canCfg.general_cfg.tx_io = TX_GPIO_NUM;
     canCfg.general_cfg.rx_io = RX_GPIO_NUM;
     canCfg.general_cfg.clkout_io = CAN_IO_UNUSED;
@@ -154,7 +158,7 @@ void canInit(void)
     canCfg.filter_cfg.acceptance_code = 0;
     canCfg.filter_cfg.acceptance_mask = 0xFFFFFFFF;
     canCfg.filter_cfg.single_filter = true; // CAN_FILTER_CONFIG_ACCEPT_ALL();
-
+*/
   /*  canCfg.timing_cfg.brp = 8;
     canCfg.timing_cfg.tseg_1 = 15;
     canCfg.timing_cfg.tseg_2 = 4;
@@ -174,19 +178,19 @@ void canInit(void)
    // ESP_ERROR_CHECK(can_driver_install(&canCfg.general_cfg , &canCfg.filter_cfg, &canCfg.timing_cfg));
    // ESP_ERROR_CHECK(can_driver_install(&canCfg.general_cfg , &canCfg.timing_cfg, &canCfg.filter_cfg));
 
-    ESP_ERROR_CHECK(can_driver_install(&g_config, &t_config_500, &f_config));
+    ESP_ERROR_CHECK(can_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(CAN_TAG, "Driver installed");
     ESP_ERROR_CHECK(can_start());
     ESP_LOGI(CAN_TAG, "Driver started");
 
-     ESP_ERROR_CHECK(can_stop());
+   /*  ESP_ERROR_CHECK(can_stop());
       ESP_ERROR_CHECK(can_driver_uninstall());
 
       ESP_ERROR_CHECK(can_driver_install(&g_config, &t_config_100, &f_config));
       ESP_LOGI(CAN_TAG, "Driver installed");
       ESP_ERROR_CHECK(can_start());
       ESP_LOGI(CAN_TAG, "Driver started");
-
+*/
   //  xSemaphoreGive(rx_sem);                     //Start RX task
 }
 
@@ -326,9 +330,9 @@ void parseCANConfig(cJSON* jdata)
 
    if (filtercfg != NULL)
     {
-      uint32_t acc_code = cJSON_GetObjectItem(filtercfg,"acc_code")->valueint;
-      uint32_t acc_mask = cJSON_GetObjectItem(filtercfg,"acc_mask")->valueint;
-      uint8_t st = cJSON_GetObjectItem(filtercfg,"single_filter")->valueint;
+ //     uint32_t acc_code = cJSON_GetObjectItem(filtercfg,"acc_code")->valueint;
+  //    uint32_t acc_mask = cJSON_GetObjectItem(filtercfg,"acc_mask")->valueint;
+  //    uint8_t st = cJSON_GetObjectItem(filtercfg,"single_filter")->valueint;
 
     //  canCfg.filter_cfg.acceptance_code = acc_code;
     //  canCfg.filter_cfg.acceptance_mask = acc_mask;

@@ -75,7 +75,7 @@ void app_main()
     set_time();
 
     canInit();
-    canReInit();
+   // canReInit();
     
   //  testCanDataGenerate();
     
